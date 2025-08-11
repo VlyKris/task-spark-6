@@ -19,7 +19,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Protected } from "@/lib/protected-page";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
-import { CheckCircle, Filter, Plus } from "lucide-react";
+import { CheckCircle, Filter, Plus, Rocket } from "lucide-react";
 import { useState } from "react";
 
 export default function Dashboard() {
@@ -57,19 +57,21 @@ export default function Dashboard() {
 
   return (
     <Protected>
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/10">
+      <div className="min-h-screen">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10"
+          className="border-b border-primary/20 bg-background/50 backdrop-blur-lg sticky top-0 z-20"
         >
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-8 w-8 text-primary" />
+              <CheckCircle className="h-8 w-8 text-primary text-glow-primary" />
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">TodoFlow</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-glow-primary">
+                  TodoFlow
+                </h1>
                 <p className="text-sm text-muted-foreground">
                   Welcome back, {user?.name || user?.email}!
                 </p>
@@ -92,8 +94,13 @@ export default function Dashboard() {
           >
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-muted-foreground" />
-              <Select value={filter} onValueChange={(value: "all" | "completed" | "pending") => setFilter(value)}>
-                <SelectTrigger className="w-[140px]">
+              <Select
+                value={filter}
+                onValueChange={
+                  (value: "all" | "completed" | "pending") => setFilter(value)
+                }
+              >
+                <SelectTrigger className="w-[140px] bg-card/80">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -104,7 +111,10 @@ export default function Dashboard() {
               </Select>
             </div>
 
-            <Button onClick={() => setShowForm(true)} className="gap-2">
+            <Button
+              onClick={() => setShowForm(true)}
+              className="gap-2 text-glow-primary shadow-[0_0_15px_oklch(var(--primary)/0.5)]"
+            >
               <Plus className="h-4 w-4" />
               Add Todo
             </Button>
@@ -121,25 +131,28 @@ export default function Dashboard() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center py-12"
+                className="text-center py-12 bg-card/50 rounded-lg border border-dashed border-primary/20"
               >
-                <CheckCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <Rocket className="h-16 w-16 text-secondary text-glow-secondary mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">
-                  {filter === "all" 
-                    ? "No todos yet" 
-                    : filter === "completed" 
-                    ? "No completed todos" 
-                    : "No pending todos"}
+                  {filter === "all"
+                    ? "Ready for takeoff?"
+                    : filter === "completed"
+                      ? "No completed missions"
+                      : "All systems clear!"}
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  {filter === "all" 
-                    ? "Create your first todo to get started!" 
-                    : filter === "completed" 
-                    ? "Complete some todos to see them here." 
-                    : "All caught up! No pending todos."}
+                  {filter === "all"
+                    ? "Create your first todo to launch your productivity."
+                    : filter === "completed"
+                      ? "Complete some missions to see them here."
+                      : "You're all caught up! No pending tasks."}
                 </p>
                 {filter === "all" && (
-                  <Button onClick={() => setShowForm(true)} className="gap-2">
+                  <Button
+                    onClick={() => setShowForm(true)}
+                    className="gap-2 text-glow-primary shadow-[0_0_15px_oklch(var(--primary)/0.5)]"
+                  >
                     <Plus className="h-4 w-4" />
                     Create Your First Todo
                   </Button>

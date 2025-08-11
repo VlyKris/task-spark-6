@@ -20,9 +20,9 @@ interface TodoItemProps {
 }
 
 const priorityColors = {
-  high: "text-red-500 border-red-200 bg-red-50 dark:bg-red-950/20",
-  medium: "text-yellow-500 border-yellow-200 bg-yellow-50 dark:bg-yellow-950/20",
-  low: "text-green-500 border-green-200 bg-green-50 dark:bg-green-950/20",
+  high: "text-destructive border-destructive/50 bg-destructive/10",
+  medium: "text-accent border-accent/50 bg-accent/10",
+  low: "text-secondary border-secondary/50 bg-secondary/10",
 };
 
 export function TodoItem({ todo, onEdit }: TodoItemProps) {
@@ -49,32 +49,37 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
 
   return (
     <motion.div
+      layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      whileHover={{ scale: 1.01 }}
-      className={`p-4 rounded-lg border bg-card transition-all duration-200 ${
-        todo.completed ? "opacity-60" : ""
+      exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
+      whileHover={{
+        scale: 1.02,
+        boxShadow: "0 0 15px oklch(var(--primary)/0.4)",
+        borderColor: "oklch(var(--primary))",
+      }}
+      className={`p-4 rounded-lg border bg-card/80 transition-all duration-200 ${
+        todo.completed ? "opacity-40 bg-card/40" : ""
       }`}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-4">
         <Checkbox
           checked={todo.completed}
           onCheckedChange={handleToggle}
-          className="mt-1"
+          className="mt-1.5"
         />
         
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center flex-wrap gap-2 mb-2">
             <h3
-              className={`font-medium ${
+              className={`font-medium break-all ${
                 todo.completed ? "line-through text-muted-foreground" : ""
               }`}
             >
               {todo.title}
             </h3>
             <span
-              className={`px-2 py-1 text-xs rounded-full border ${
+              className={`px-2 py-0.5 text-xs rounded-full border font-semibold ${
                 priorityColors[todo.priority]
               }`}
             >
@@ -84,7 +89,7 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
           
           {todo.description && (
             <p
-              className={`text-sm text-muted-foreground mb-2 ${
+              className={`text-sm text-muted-foreground mb-2 whitespace-pre-wrap break-words ${
                 todo.completed ? "line-through" : ""
               }`}
             >
@@ -93,21 +98,21 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
           )}
           
           {todo.dueDate && (
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Calendar className="h-3 w-3" />
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Calendar className="h-3.5 w-3.5" />
               <span>Due: {format(new Date(todo.dueDate), "MMM d, yyyy")}</span>
             </div>
           )}
           
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-            <Clock className="h-3 w-3" />
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+            <Clock className="h-3.5 w-3.5" />
             <span>Created: {format(new Date(todo._creationTime), "MMM d, yyyy")}</span>
           </div>
         </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="shrink-0">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -116,7 +121,10 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
               <Edit className="h-4 w-4 mr-2" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+            <DropdownMenuItem
+              onClick={handleDelete}
+              className="text-destructive focus:text-destructive focus:bg-destructive/20"
+            >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
             </DropdownMenuItem>
